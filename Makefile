@@ -16,7 +16,7 @@ all: \
 clean:
 	rm -f $(wildcard build/*)
 
-build/%.png: %.gv
+build/%.png: src/%.gv
 	dot -Tpng -Gdpi=1000 -o'$@' '$<'
 
 build/out_1.png: build/not_R.png build/implies.png build/Q_and_P.png
