@@ -1,0 +1,14 @@
+digraph G {
+  p [label=P shape=circle]
+	p -> r0 [arrowhead=none style=dashed]
+	p -> q1 [arrowhead=none]
+  0 [label=0 shape=square]
+  1 [label=1 shape=square]
+  r0 [label=R shape=circle]
+  r0 -> 0 [arrowhead=none style=dashed]
+  r0 -> 1 [arrowhead=none]
+  q1 [label=Q shape=circle]
+  q1 -> r0 [arrowhead=none style=dashed]
+  q1 -> 1 [arrowhead=none]
+}
+

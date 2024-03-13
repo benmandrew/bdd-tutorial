@@ -1,0 +1,7 @@
+digraph G {
+  r [label=R shape=circle]
+	0 [shape=square]
+	1 [shape=square]
+	r -> 0 [arrowhead=none style=dashed]
+	r -> 1 [arrowhead=none]
+}
