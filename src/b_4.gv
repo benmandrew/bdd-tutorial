@@ -15,17 +15,17 @@ digraph G {
 		style=filled;
 		color=lightgrey;
     q1 [label=Q shape=circle]
-    11 [label=1 shape=square]
-    q1 -> r2 [arrowhead=none style=dashed]
-    subgraph cluster_2 {
+    q1 -> 12 [arrowhead=none style=dashed]
+    q1 -> r3 [arrowhead=none]
+    12 [label=1 shape=square]
+    subgraph cluster_3 {
       style=filled;
       color=white;
-      r2 [label=R shape=circle]
-      02 [label=0 shape=square]
-      12 [label=1 shape=square]
-      r2 -> 02 [arrowhead=none style=dashed]
-      r2 -> 12 [arrowhead=none]
+      r3 [label=R shape=circle]
+      03 [label=0 shape=square]
+      13 [label=1 shape=square]
+      r3 -> 03 [arrowhead=none]
+      r3 -> 13 [arrowhead=none style=dashed]
     }
-    q1 -> 11 [arrowhead=none]
 	}
 }

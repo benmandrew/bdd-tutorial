@@ -1,0 +1,16 @@
+digraph G {
+  p [label=P shape=circle color="grey"]
+	p -> r0 [arrowhead=none style=dashed color="grey"]
+	p -> q1 [arrowhead=none color="grey"]
+  0 [label=0 shape=square color="red"]
+  1 [label=1 shape=square color="red"]
+  r0 [label=R shape=circle color="red"]
+  r0 -> 0 [arrowhead=none style=dashed color="red"]
+  r0 -> 1 [arrowhead=none color="red"]
+  q1 [label=Q shape=circle color="grey"]
+  q1 -> 1 [arrowhead=none style=dashed color="grey"]
+  q1 -> r3 [arrowhead=none color="grey"]
+  r3 [label=R shape=circle color="grey"]
+  r3 -> 0 [arrowhead=none color="grey"]
+  r3 -> 1 [arrowhead=none style=dashed color="grey"]
+}

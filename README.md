@@ -1,7 +1,7 @@
 ### Build BDD images
 
 ```bash
-make
+make all -j8
 ```
 
 ### Required dependencies
