@@ -1,0 +1,378 @@
+\documentclass[11pt]{article}
+
+\usepackage[numbers]{natbib}
+
+\usepackage{fancyhdr}
+
+\usepackage{lastpage}       % ``n of m'' page numbering
+\usepackage{lscape}         % Makes landscape easier
+
+\usepackage{verbatim}       % Verbatim blocks
+\usepackage{listings}       % Source code listings
+\usepackage{epsfig}         % Embed encapsulated postscript
+\usepackage{array}          % Array environment
+\usepackage{array}          % Array environment
+\usepackage{enumitem}       % Required by Tom Johnson's exam question header
+
+\usepackage{hhline}         % Horizontal lines in tables
+\usepackage{siunitx}        % Correct spacing of units
+\usepackage{amsmath}        % American Mathematical Society
+\usepackage{amssymb}        % Maths symbols
+\usepackage{amsthm}         % Theorems
+
+\usepackage{ifthen}         % Conditional processing in tex
+\usepackage{tabularx}
+\usepackage{booktabs}
+
+\usepackage[top=3cm,
+            bottom=3cm,
+            inner=2cm,
+            outer=2cm]{geometry}
+
+% If you have any additional \usepackage commands, or other
+% macros or directives, put them here.  Remember not to edit
+% files in the template directory because any changes will
+% be overwritten when template updates are issued.
+\usepackage{float,graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+
+%\usepackage[numbers]{natbib}
+\usepackage[nottoc,notlot,notlof]{tocbibind}
+\bibliographystyle{unsrtnat}
+
+\lstset{
+	basicstyle=\ttfamily,
+	literate={~} {Case: $\sim$}{1}
+}
+
+\newcommand{\repeatcaption}[2]{%
+  \renewcommand{\thefigure}{\ref{#1}}%
+  \captionsetup{list=no}%
+  \caption{#2 (repeated from page \pageref{#1})}%
+  \addtocounter{figure}{-1}% So that next figure after the repeat gets the right number.
+}
+
+\usepackage[absolute,overlay]{textpos}
+
+\usepackage{sectsty}
+\usepackage{graphicx}
+\usepackage[parfill]{parskip}
+\usepackage{hyperref}
+
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\graphicspath{ {./build/} }
+
+\title{\textbf{Constructing Binary Decision Diagrams (BDDs)}}
+\author{Author: Ben Andrew}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% Optional TOC
+% \tableofcontents
+% 
+
+%--Paper--
+
+We cover a couple of examples of constructing BDDs from propositional formulae. This article assumes knowledge of the basics of BDDs.
+
+Note: our ordering of propositional letters is alphabetical, e.g. $P$ then $Q$ then $R$.
+
+\subsection{Aside: Sub-BDDs?}
+
+In the following text I use the term `sub-BDD'. Below we see highlighted the two sub-BDDs that we get for an example BDD, the first if we take the $P=0$ branch, the second the $P=1$ branch.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.50\linewidth]{c_1}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.50\linewidth]{c_2}
+  \end{subfigure}
+\end{figure}
+
+We now move on to the first example.
+
+\section{BDD of $\neg R \Rightarrow (Q \wedge P)$}
+
+We start by computing the BDD for $\neg R \Rightarrow (Q \wedge P)$. On the left of the image below we see the BDD for $\neg R$, and on the right the BDD for $Q \wedge P$. The implication symbol inbetween them is drawn as a reminder of the connective that we're applying.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.57\linewidth]{out_1}
+\end{figure}
+
+We case split on the $P$ node, for each BDD getting the sub-BDD following the $P=0$ path, and the $P=1$ path.
+
+\subsection{Case: $P=0$}
+
+The left BDD has no $P$ node, and so is left unchanged. In the right BDD we simply get the $0$ (zero) leaf node.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.47\linewidth]{out_2}
+\end{figure}
+
+We could now case split on $R$ and continue the recursion, but now that we've encountered a leaf node we can just compute the result of the connective applied to each of the leaves of the left sub-BDD with the boolean value on the right. This would give us $0 \Rightarrow 0 = 1$ if $R=1$ and $1 \Rightarrow 0 = 0$ if $R=0$. Effectively this has swapped the outgoing edges of the $R$ node, producing the below BDD.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.25\linewidth]{R}
+\end{figure}
+
+We can now recurse upwards and attach the $P=0$ edge to this new sub-BDD.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.57\linewidth]{a_1}
+\end{figure}
+
+We now turn to the $P=1$ case.
+
+\pagebreak
+
+\subsection{Case: $P=1$}
+
+We need the sub-BDDs produced by following the $P=1$ edge for each of the initial BDDs, giving us
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.67\linewidth]{out_3}
+\end{figure}
+
+As we don't have any leaf nodes, we can recurse again, now on $Q$.
+
+\subsection{Case: $Q=0$}
+
+Following the $Q=0$ path gives us
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.53\linewidth]{out_4}
+\end{figure}
+
+which produces 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.25\linewidth]{R}
+\end{figure}
+
+\subsection{Case: $Q=1$}
+
+Recursing upwards and following the $Q=1$ path gives us
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.53\linewidth]{out_5}
+\end{figure}
+
+Doing the computation with the $\Rightarrow$ gives us a BDD where both the positive and negative edge of $R$ lead to a $1$ (one) leaf. This can be simplified by removing the redundant $R$ node and simply returning
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.12\linewidth]{1}
+\end{figure}
+
+\pagebreak
+
+\subsection{Putting It Together}
+
+Recursing all the way up, we draw on our page the following tree,
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.80\linewidth]{a_2}
+\end{figure}
+
+We first combine each of the $1$ and $0$ leaf nodes together, producing the BDD below on the left.
+
+We can then remove duplicated nodes. Notice that both of the $R$ nodes have the exact same output edges. This means that we can combine these into one new node, which takes the input edges of both — in this case from $P$ and $R$. This gives us the BDD on the right, which is fully reduced.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.50\linewidth]{a_3}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.50\linewidth]{not_P_implies_Q_and_R}
+  \end{subfigure}
+\end{figure}
+
+We have computed the Reduced, Ordered, Binary Decision Diagram (ROBDD) of $\neg R \Rightarrow (Q \wedge P)$.
+
+Note that the choice of connective had no impact for most of the execution of the algorithm. It is only at the leaf nodes that we directly computed the implication on boolean values, which is trivial for any operator we choose. Combining two BDDs with the exclusive or ($\oplus$) is exactly as simple as finding their conjunction ($\wedge$).
+
+\pagebreak
+
+\section{BDD of $(\neg R \Rightarrow (Q \wedge P)) \iff (P \wedge (Q \oplus R))$}
+
+We will now combine the BDD we produced above for $\neg R \Rightarrow (Q \wedge P)$ with another BDD for $P \wedge (Q \oplus R)$ by the $\iff$ connective. We repeat the new BDD for the former on the left, and show the BDD for the latter on the right.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.50\linewidth]{not_P_implies_Q_and_R}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.50\linewidth]{P_and_Q_xor_R}
+  \end{subfigure}
+\end{figure}
+
+It's easy to feel intimidated by the $\iff$ symbol and try to expand it out into its implication form, but this will make the task far more complex than it needs to be. As we saw above, the choice of connective makes no difference for 90\% of the algorithm's execution.
+
+We start by case splitting on the $P$ node. For each of the cases, we have two sub-BDDs gotten by following the choice for each BDD.
+
+\pagebreak
+
+\subsection{Case: $P=0$}
+
+The two sub-BDDs we get by following the $P=0$ choice for each BDD above are
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.50\linewidth]{R}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.24\linewidth]{0}
+  \end{subfigure}
+\end{figure}
+
+As we have reached a leaf node, we can apply the $\iff$ to it and each of the leaves of the other sub-BDD, giving us
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.25\linewidth]{not_R}
+\end{figure}
+
+As this case is finished we can attach it to the $0$ branch of the $P$ node, and recurse into the $P=1$ case.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.57\linewidth]{b_1}
+\end{figure}
+
+\subsection{Case: $P=1$}
+
+The two sub-BDDs we get by following the $P=1$ choice for each BDD are
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.50\linewidth]{Q_or_R}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.50\linewidth]{Q_xor_R}
+  \end{subfigure}
+\end{figure}
+
+We need to case split on the $Q$ node.
+
+\pagebreak
+
+\subsection{Case: $Q=0$}
+
+The two sub-BDDs we get by following the $Q=0$ choice are
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.50\linewidth]{R}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.50\linewidth]{R}
+  \end{subfigure}
+\end{figure}
+
+Case splitting on the $R$ node and applying the $\iff$ connective to each leaf, we get a BDD where both branches of $R$ lead to the same outcome. This node is redundant, and the BDD can be simplified into a $1$ node as follows.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=0.80\linewidth]{b_2}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=0.39\linewidth]{b_3}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \centering
+    \includegraphics[width=0.39\linewidth]{1}
+  \end{subfigure}
+\end{figure}
+
+\pagebreak
+
+\subsection{Case: $Q=1$}
+
+The two sub-BDDs are
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.24\linewidth]{1}
+  \end{subfigure}
+  \begin{subfigure}{0.49\textwidth}
+    \centering
+    \includegraphics[width=0.50\linewidth]{not_R}
+  \end{subfigure}
+\end{figure}
+
+which, combined by $\iff$, gives us
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.25\linewidth]{not_R}
+\end{figure}
+
+\pagebreak
+
+\subsection{Putting It Together}
+
+As before, we reattach the new sub-BDDs and then combine duplicate nodes.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}{0.59\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{b_4}
+  \end{subfigure}
+  \begin{subfigure}{0.39\textwidth}
+    \centering
+    \includegraphics[width=0.60\linewidth]{b_5}
+  \end{subfigure}
+\end{figure}
+
+This is the BDD of $(\neg R \Rightarrow (Q \wedge P)) \iff (P \wedge (Q \oplus R))$.
+
+%--/Paper--
+
+\end{document}

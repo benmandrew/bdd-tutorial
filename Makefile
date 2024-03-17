@@ -6,10 +6,13 @@ IMAGES=$(patsubst src/%.gv,build/%.png,$(wildcard src/*.gv)) \
 	build/out_5.png \
 	build/bdd.png
 
-all: images
+all: images build/article.pdf
 
 clean:
 	rm -f $(wildcard build/*)
+
+build/article.pdf: images
+	pdflatex -output-directory build article.tex
 
 images: $(IMAGES)
 
