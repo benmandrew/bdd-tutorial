@@ -1,4 +1,4 @@
-### Build BDD images
+### Build BDD images and article PDF
 
 ```bash
 make all -j8
@@ -8,3 +8,4 @@ make all -j8
 
 - `graphviz`
 - `imagemagick`
+- `pdflatex`
